@@ -1,0 +1,4 @@
+spacy
+presidio_analyzer
+presidio-anonymizer
+requests

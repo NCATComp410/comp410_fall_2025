@@ -1,0 +1,44 @@
+Entities,Team
+ABA_ROUTING_NUMBER,Aggie Annihilators
+AU_ABN,Aggie Annihilators
+AU_ACN,Aggie Annihilators
+AU_MEDICARE,Aggie Annihilators
+AU_TFN,Aggie Annihilators
+,
+CREDIT_CARD,Bit By Bit
+CRYPTO,Bit By Bit
+DATE_TIME,Bit By Bit
+EMAIL_ADDRESS,Bit By Bit
+MEDICAL_LICENSE,Bit By Bit
+,
+ES_NIE,Code7
+ES_NIF,Code7
+FI_PERSONAL_IDENTITY_CODE,Code7
+IBAN_CODE,Code7
+IP_ADDRESS,Code7
+,
+IN_AADHAAR,Seven Eleven
+IN_PAN,Seven Eleven
+IN_PASSPORT,Seven Eleven
+IN_VEHICLE_REGISTRATION,Seven Eleven
+IN_VOTER,Seven Eleven
+,
+IT_DRIVER_LICENSE,Team1
+IT_FISCAL_CODE,Team1
+IT_IDENTITY_CARD,Team1
+IT_PASSPORT,Team1
+IT_VAT_CODE,Team1
+,
+URL,Things and Tings
+US_BANK_NUMBER,Things and Tings
+US_DRIVER_LICENSE,Things and Tings
+US_ITIN,Things and Tings
+US_PASSPORT,Things and Tings
+,
+PHONE_NUMBER,Type Error Titans
+LOCATION,Type Error Titans
+PERSON,Type Error Titans
+UK_NHS,Type Error Titans
+UK_NINO,Type Error Titans
+,
+US_SSN,Null
