@@ -13,7 +13,8 @@ from presidio_analyzer.predefined_recognizers import (ItDriverLicenseRecognizer,
                                                       PlPeselRecognizer,
                                                       FiPersonalIdentityCodeRecognizer,
                                                       AbaRoutingRecognizer,
-                                                      AuAbnRecognizer)
+                                                      AuAbnRecognizer,
+                                                      AuAcnRecognizer)
 
 from presidio_anonymizer import AnonymizerEngine
 import requests
@@ -50,6 +51,7 @@ registry.add_recognizer(PlPeselRecognizer(supported_language='en'))
 registry.add_recognizer(FiPersonalIdentityCodeRecognizer(supported_language='en'))
 registry.add_recognizer(AbaRoutingRecognizer(supported_language='en'))
 registry.add_recognizer(AuAbnRecognizer(supported_language='en'))
+registry.add_recognizer(AuAcnRecognizer(supported_language='en'))
 
 
 # Create an analyzer object
