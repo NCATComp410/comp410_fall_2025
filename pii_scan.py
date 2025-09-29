@@ -14,7 +14,15 @@ from presidio_analyzer.predefined_recognizers import (ItDriverLicenseRecognizer,
                                                       FiPersonalIdentityCodeRecognizer,
                                                       AbaRoutingRecognizer,
                                                       AuAbnRecognizer,
-                                                      AuAcnRecognizer)
+                                                      AuAcnRecognizer,
+                                                      AuMedicareRecognizer,
+                                                      AuTfnRecognizer,
+                                                      InAadhaarRecognizer,
+                                                      InPanRecognizer,
+                                                      InPassportRecognizer,
+                                                      InVehicleRegistrationRecognizer,
+                                                      InVoterRecognizer,
+                                                      UkNinoRecognizer)
 
 from presidio_anonymizer import AnonymizerEngine
 import requests
@@ -52,6 +60,14 @@ registry.add_recognizer(FiPersonalIdentityCodeRecognizer(supported_language='en'
 registry.add_recognizer(AbaRoutingRecognizer(supported_language='en'))
 registry.add_recognizer(AuAbnRecognizer(supported_language='en'))
 registry.add_recognizer(AuAcnRecognizer(supported_language='en'))
+registry.add_recognizer(AuMedicareRecognizer(supported_language='en'))
+registry.add_recognizer(AuTfnRecognizer(supported_language='en'))
+registry.add_recognizer(InAadhaarRecognizer(supported_language='en'))
+registry.add_recognizer(InPanRecognizer(supported_language='en'))
+registry.add_recognizer(InPassportRecognizer(supported_language='en'))
+registry.add_recognizer(InVehicleRegistrationRecognizer(supported_language='en'))
+registry.add_recognizer(InVoterRecognizer(supported_language='en'))
+registry.add_recognizer(UkNinoRecognizer(supported_language='en'))
 
 
 # Create an analyzer object
