@@ -11,6 +11,23 @@ class TestTeam_null(unittest.TestCase):
 
     def test_us_ssn(self):
         """Test US_SSN functionality"""
+        prefix = ['111', '222']
+        middle = ['22', '33', '44']
+        suffix = ['3434', '5454']
+
+        # build sample ssn
+        # positive test cases
+        for p in prefix:
+            for m in middle:
+                for s in suffix:
+                    ssn_text = f'my ssn is {p}-{m}-{s}'
+                    result = analyze_text(ssn_text, ['US_SSN'])
+                    # check entity_type for US_SSN
+                    self.assertEqual(result[0].entity_type, 'US_SSN')
+
+        # negative test case
+        result = analyze_text('my ssn is hidden', ['US_SSN'])
+        self.assertListEqual(result, [])
 
 
 if __name__ == '__main__':
