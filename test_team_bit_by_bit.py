@@ -20,9 +20,24 @@ class TestTeam_bit_by_bit(unittest.TestCase):
 
     def test_email_address(self):
         """Test EMAIL_ADDRESS functionality"""
+        prefixes = ['john.doe', 'jane_smith', 'user123']
+        domains = ['gmail.com', 'outlook.com', 'ncat.edu']
 
+        # Positve test cases
+        for p in prefixes:
+            for d in domains:
+                email_text = f'my email is {p}@{d}'
+                result = analyze_text(email_text, ['EMAIL_ADDRESS'])
+                self.assertEqual(result[0].entity_type, 'EMAIL_ADDRESS')
+
+        # Negative test cases
+        result = analyze_text('my email is hidden', ['EMAIL_ADDRESS'])
+        self.assertListEqual(result, [])
+
+        
     def test_medical_license(self):
         """Test MEDICAL_LICENSE functionality"""
+
 
 
 if __name__ == '__main__':
