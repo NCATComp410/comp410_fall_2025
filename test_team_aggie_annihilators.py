@@ -20,14 +20,14 @@ class TestTeam_aggie_annihilators(unittest.TestCase):
         # Positive test case - basic format
         acn = 'my australian company number is ACN 010 499 966'
         result = analyze_text(acn, ['AU_ACN'])
-        self.assertEqual(len(result), 1, "Should find 1 ACN entity")
+        self.assertEqual(len(result), 1)
         self.assertEqual(result[0].entity_type, 'AU_ACN')
         
         # Try without 'ACN' prefix
         acn_no_prefix = 'my australian company number is 010 499 966'
         result = analyze_text(acn_no_prefix, ['AU_ACN'])
-        self.assertEqual(len(result), 1, "Should detect ACN without prefix")
-        
+        self.assertEqual(len(result), 1)
+
         # negative test case
         result = analyze_text('ACN is required', ['AU_ACN'])
         self.assertEqual(result, [])
