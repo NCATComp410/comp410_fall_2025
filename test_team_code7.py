@@ -24,6 +24,15 @@ class TestTeam_code7(unittest.TestCase):
     def test_ip_address(self):
         """Test IP_ADDRESS functionality"""
 
+        correctIP = "192.158.1.38"
+        wrongIP = "192.158.1.372"
+
+        correctResult = analyze_text(text=correctIP, entity_list=["IP_ADDRESS"])
+        wrongResult = analyze_text(text=wrongIP, entity_list=["IP_ADDRESS"])
+
+        self.assertEqual(correctResult[0].entity_type, "IP_ADDRESS")
+        self.assertEqual(wrongResult, [])
+
 
 if __name__ == '__main__':
     unittest.main()
