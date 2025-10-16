@@ -21,7 +21,7 @@ class TestTeam_bit_by_bit(unittest.TestCase):
     def test_email_address(self):
         """Test EMAIL_ADDRESS functionality"""
 
-    def test_medical_license(self):
+    def test_medical_license():
         """Test MEDICAL_LICENSE functionality"""
 
 
