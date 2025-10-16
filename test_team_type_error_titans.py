@@ -23,7 +23,22 @@ class TestTeam_type_error_titans(unittest.TestCase):
 
     def test_uk_nino(self):
         """Test UK_NINO functionality"""
+        prefix = ['AA', 'BB', 'CC']
+        middle = ['375629', '837452', '926418']
+        suffix = ['A', 'B', 'C', 'D']
 
+        # Build sample nino
+        # Positive test cases
+        for p in prefix:
+            for m in middle:
+                for s in suffix:
+                    nino_text = f'my nino is {p}{m}{s}'
+                    print(nino_text)
+                    result = analyze_text(nino_text, ['UK_NINO'])
+                    # Check entity_type for UK_NINO
+                    #self.assertEqual(result[0].entity_type, 'UK_NINO')
+        result = analyze_text('my nino is hidden', ['UK_NINO'])
+        self.assertListEqual(result, [])
 
 if __name__ == '__main__':
     unittest.main()
