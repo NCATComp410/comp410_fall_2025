@@ -19,7 +19,7 @@ class TestTeam_aggie_annihilators(unittest.TestCase):
         """Test AU_ACN functionality"""
 
     def test_au_medicare(self):
-       """Test AU_MEDICARE functionality"""
+        """Test AU_MEDICARE functionality"""
         prefix = ['1234', '2345']
         middle = ['56789', '67890']
         suffix = ['1', '2']
@@ -38,6 +38,7 @@ class TestTeam_aggie_annihilators(unittest.TestCase):
         # negative test case
         result = analyze_text('my medicare number is hidden', ['AU_MEDICARE'])
         self.assertListEqual(result, [])
+
 
     def test_au_tfn(self):
         """Test AU_TFN functionality"""
