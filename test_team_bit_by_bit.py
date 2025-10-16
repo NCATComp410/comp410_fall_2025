@@ -42,7 +42,21 @@ class TestTeam_bit_by_bit(unittest.TestCase):
         """Test EMAIL_ADDRESS functionality"""
 
     def test_medical_license(self):
-        """Test MEDICAL_LICENSE functionality"""
+    """Test MEDICAL_LICENSE functionality"""
+    text_with_license = "Dr. Jane Doe - License No: MD123456"
+    text_without_license = "Dr. Jane Doe - Healthcare Professional"
+    
+    # Define the entities you want to scan for
+    entities = ["MEDICAL_LICENSE"]
+    
+    # Call analyze_text with both arguments
+    results_with = analyze_text(text_with_license, entities)
+    results_without = analyze_text(text_without_license, entities)
+    
+    # Assertions to check if the license was detected correctly
+    self.assertIn("MD123456", results_with)
+    self.assertNotIn("MD123456", results_without)
+
 
 
 if __name__ == '__main__':
