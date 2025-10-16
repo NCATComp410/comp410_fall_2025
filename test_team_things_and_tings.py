@@ -23,7 +23,14 @@ class TestTeam_things_and_tings(unittest.TestCase):
 
     def test_us_passport(self):
         """Test US_PASSPORT functionality"""
+        
+        #positive test case
+        result = analyze_text('123456789', ['US_PASSPORT'])
+        self.assertEqual(result[0].entity_type, 'US_PASSPORT')
 
+        #negative test case
+        result = analyze_text('My passport numbers are hidden or not found', ['US_PASSPORT'])
+        self.assertListEqual(result, [])
 
 if __name__ == '__main__':
     unittest.main()
