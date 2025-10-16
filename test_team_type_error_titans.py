@@ -20,6 +20,24 @@ class TestTeam_type_error_titans(unittest.TestCase):
 
     def test_uk_nhs(self):
         """Test UK_NHS functionality"""
+        prefix = ['943','485','901']
+        middle = ['476','777','234']
+        suffix = ['591','345','561']
+        checksum = ['9','0','7']
+        
+        for p in prefix:
+            for m in middle:
+                for s in suffix:
+                    for c in checksum:
+                        nhs_text = f'my uk_nhs is {p}{m}{s}{c}'
+                        result = analyze_text(nhs_text,['UK_NHS'])
+
+        result = analyze_text('my uk_nhs is hidden',['UK_NHS'])
+        self.assertListEqual(result,[])
+
+        print(result)
+
+        
 
     def test_uk_nino(self):
         """Test UK_NINO functionality"""
