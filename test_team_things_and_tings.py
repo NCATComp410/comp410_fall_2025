@@ -28,7 +28,16 @@ class TestTeam_things_and_tings(unittest.TestCase):
 
     def test_us_driver_license(self):
         """Test US_DRIVER_LICENSE functionality"""
+        possible = ['11111111111','22222222222','33333333333']
+        #possible test cases
+        for p in possible:
+            license_text = f'my license # is {p}'
+            result = analyze_text(license_text,['US_DRIVER_LICENSE'])
+            self.assertEqual(result[0].entity_type, 'US_DRIVER_LICENSE')
 
+        # negative test case
+        result= analyze_text('my license is hidden', ['US_DRIVER_LICENSE'])
+        self.assertListEqual(result,[])
     def test_us_itin(self):
         """Test US_ITIN functionality"""
 
