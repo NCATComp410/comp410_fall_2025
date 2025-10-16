@@ -11,6 +11,9 @@ class TestTeam_aggie_annihilators(unittest.TestCase):
 
     def test_aba_routing_number(self):
         """Test ABA_ROUTING_NUMBER functionality"""
+          self.assertIsInstance(ABA_ROUTING_NUMBER, str)
+          self.assertEqual(len(ABA_ROUTING_NUMBER), 9)
+          self.assertTrue(ABA_ROUTING_NUMBER.isdigit())
 
     def test_au_abn(self):
         """Test AU_ABN functionality"""
