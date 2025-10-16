@@ -11,6 +11,26 @@ class TestTeam_bit_by_bit(unittest.TestCase):
 
     def test_credit_card(self):
         """Test CREDIT_CARD functionality"""
+        valid_cards = [
+            '4111-1111-1111-1111',  # Visa
+            '5500-0000-0000-0004',  # MasterCard
+            '3400-0000-0000-009',   # AmEx
+            '6011-0000-0000-0004',  # Discover
+            '5365-3563-3929-5416',
+            '6583-9941-9899-2949',
+            '5580-4369-7799-9575',
+            
+        ]
+
+        # Positive test cases
+        for card in valid_cards:
+            credit_card_text = f'my credit card is {card}'
+            result = analyze_text(credit_card_text, ['CREDIT_CARD'])
+            self.assertEqual(result[0].entity_type, 'CREDIT_CARD')
+
+        # Negative test cases
+        result = analyze_text('my credit card is hidden', ['CREDIT_CARD'])
+        self.assertEqual(result, [])
 
     def test_crypto(self):
         """Test CRYPTO functionality"""
