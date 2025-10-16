@@ -43,6 +43,17 @@ class TestTeam_bit_by_bit(unittest.TestCase):
 
     def test_medical_license(self):
         """Test MEDICAL_LICENSE functionality"""
+        text_with_license = "Dr. Jane Doe - License No: MD123456"
+        text_without_license = "Dr. Jane Doe - Healthcare Professional"
+
+        results_with = analyze_text(text_with_license)
+        results_without = analyze_text(text_without_license)
+
+        detected_entities = [r.entity_type for r in results_with]
+        self.assertIn("MEDICAL_LICENSE", detected_entities, "Should detect medical license")
+
+        detected_entities_without = [r.entity_type for r in results_without]
+        self.assertNotIn("MEDICAL_LICENSE", detected_entities_without, "Should not detect medical license")
 
 
 if __name__ == '__main__':
