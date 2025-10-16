@@ -35,6 +35,7 @@ class TestTeam_bit_by_bit(unittest.TestCase):
     def test_crypto(self):
         """Test CRYPTO functionality"""
 
+ 5-detect-crypto
         # Positive test cases (valid crypto patterns)
         crypto_samples = [
             "My wallet is 0x32Be343B94f860124dC4fEe278FDCBD38C102D88",  # Ethereum
@@ -48,6 +49,8 @@ class TestTeam_bit_by_bit(unittest.TestCase):
             self.assertGreater(len(result), 0, f"No crypto detected in: {sample}")
             self.assertEqual(result[0].entity_type, 'CRYPTO')
 
+   
+
         # Negative test cases (no crypto present)
         negative_samples = [
             "I love using digital money but not real crypto",
@@ -60,6 +63,35 @@ class TestTeam_bit_by_bit(unittest.TestCase):
             # Ensure nothing is detected
             self.assertListEqual(result, [], f"False positive for: {sample}")
 
+            
+      def test_date_time(self):
+        """Test DATE_TIME functionality"""
+        valid_dates = [
+            'January 1, 2025', #All possible date_times
+            '2025-10-16',
+            '10/16/2025', 
+            '16 Oct 2025',
+            '2025/10/16 14:30',
+            'October 16th, 2025 2:30 PM',
+            '3:45 PM on October 16, 2025',  # combined date and time
+            'October 16, 2025 at noon'
+        ]
+
+        # Positive test cases
+        for date_text in valid_dates:
+            text = f"The event is at {date_text}"
+            result = analyze_text(text, ['DATE_TIME'])
+            self.assertTrue(result, f"No DATE_TIME entity found for: {date_text}")
+            self.assertEqual(result[0].entity_type, 'DATE_TIME', f"Incorrect entity for: {date_text}")
+
+        # Negative test cases
+        result = analyze_text("The event happens at", ['DATE_TIME'])
+        self.assertEqual(result, [])
+        main   
+            
+            
+            
+           
 
 if __name__ == '__main__':
     unittest.main()

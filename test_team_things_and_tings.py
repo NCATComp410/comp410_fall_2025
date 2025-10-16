@@ -11,6 +11,21 @@ class TestTeam_things_and_tings(unittest.TestCase):
 
     def test_url(self):
         """Test URL functionality"""
+        prefix = ['https://']
+        middle = ['www.github']
+        suffix = ['.com']
+
+        for p in prefix:
+            for m in middle:
+                for s in suffix:
+                    url_text = f'my url is {p}{m}{s}'
+                    print(url_text)
+                    result = analyze_text(url_text, ['URL'])
+                    self.assertEqual(result[0].entity_type, 'URL')
+
+        #negative test case
+        result = analyze_text('my url is hidden', ['URL'])
+        self.assertListEqual(result, [])
 
     def test_us_bank_number(self):
         """Test US_BANK_NUMBER functionality"""
