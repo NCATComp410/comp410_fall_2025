@@ -155,8 +155,4 @@ def read_data() -> list:
 
 
 if __name__ == '__main__':
-    correctID = "131052-308T"
-    wrongID = "211209+++iwqow"
-
-    print(analyze_text(text = correctID,  entity_list=["FI_PERSONAL_IDENTITY_CODE"]))
     print(show_aggie_pride())

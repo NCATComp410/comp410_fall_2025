@@ -1,7 +1,6 @@
 """Unit test file for team code7"""
 import unittest
 from pii_scan import analyze_text, show_aggie_pride  # noqa 
-import re
 
 
 class TestTeam_code7(unittest.TestCase):
@@ -31,9 +30,6 @@ class TestTeam_code7(unittest.TestCase):
 
          # error test case, Returns None because string does not match regex
         self.assertListEqual(failureReseult, [])
-
-
-
 
     def test_iban_code(self):
         """Test IBAN_CODE functionality"""
