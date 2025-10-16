@@ -19,7 +19,25 @@ class TestTeam_aggie_annihilators(unittest.TestCase):
         """Test AU_ACN functionality"""
 
     def test_au_medicare(self):
-        """Test AU_MEDICARE functionality"""
+       """Test AU_MEDICARE functionality"""
+        prefix = ['1234', '2345']
+        middle = ['56789', '67890']
+        suffix = ['1', '2']
+
+        # build sample medicare numbers
+        # positive test cases
+        for p in prefix:
+            for m in middle:
+                for s in suffix:
+                    medicare_text = f"My Medicare number is {p} {m} {s}"
+                    result = analyze_text(medicare_text, ['AU_MEDICARE'])
+
+                    # check entity_type for AU_MEDICARE
+                    self.assertEqual(result[0].entity_type, 'AU_MEDICARE')
+
+        # negative test case
+        result = analyze_text('my medicare number is hidden', ['AU_MEDICARE'])
+        self.assertListEqual(result, [])
 
     def test_au_tfn(self):
         """Test AU_TFN functionality"""
