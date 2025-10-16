@@ -14,6 +14,17 @@ class TestTeam_things_and_tings(unittest.TestCase):
 
     def test_us_bank_number(self):
         """Test US_BANK_NUMBER functionality"""
+        positive_text = "Valid numbers are 9876543210 and 12345678."
+        expected_positive_numbers = ['9876543210', '12345678']
+        found_results = analyze_text(positive_text, entity_list=["US_BANK_NUMBER"])
+        found_positive_numbers = [positive_text[res.start:res.end] for res in found_results]
+        self.assertCountEqual(found_positive_numbers, expected_positive_numbers)
+
+        negative_text = "Invalid ones are 1234567 and 123456789012345678."
+        expected_negative_numbers = []
+        found_negative_numbers = analyze_text(negative_text, entity_list=["US_BANK_NUMBER"])
+        self.assertEqual(found_negative_numbers, expected_negative_numbers)
+
 
     def test_us_driver_license(self):
         """Test US_DRIVER_LICENSE functionality"""
