@@ -1,6 +1,7 @@
 """Unit test file for team code7"""
 import unittest
 from pii_scan import analyze_text, show_aggie_pride  # noqa 
+import re
 
 
 class TestTeam_code7(unittest.TestCase):
@@ -16,7 +17,23 @@ class TestTeam_code7(unittest.TestCase):
         """Test ES_NIF functionality"""
 
     def test_fi_personal_identity_code(self):
-        """Test FI_PERSONAL_IDENTITY_CODE functionality"""
+        """Test FI_PERSONAL_IDENTITY_CODE functionality""" 
+        
+        correctID = "My FI Personal code is 131052-308T"
+        wrongID = "MY FI Personal code 211209+++iwqow"
+
+        correctResult = analyze_text(text = correctID,  entity_list=["FI_PERSONAL_IDENTITY_CODE"])
+        failureReseult = analyze_text(text = wrongID,  entity_list=["FI_PERSONAL_IDENTITY_CODE"])
+
+         # positive test case Checks if ID matches the format
+        self.assertEqual(correctResult[0].entity_type , "FI_PERSONAL_IDENTITY_CODE")
+
+
+         # error test case, Returns None because string does not match regex
+        self.assertListEqual(failureReseult, [])
+
+
+
 
     def test_iban_code(self):
         """Test IBAN_CODE functionality"""
