@@ -35,8 +35,6 @@ class TestTeam_type_error_titans(unittest.TestCase):
         result = analyze_text('my uk_nhs is hidden',['UK_NHS'])
         self.assertListEqual(result,[])
 
-        print(result)
-
         
 
     def test_uk_nino(self):
