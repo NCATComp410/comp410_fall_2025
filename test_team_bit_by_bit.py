@@ -43,6 +43,21 @@ class TestTeam_bit_by_bit(unittest.TestCase):
 
     def test_medical_license(self):
         """Test MEDICAL_LICENSE functionality"""
+    text_with_license = "Dr. Jane Doe - License No: MD123456"
+    text_without_license = "Dr. Jane Doe - Healthcare Professional"
+
+    # Run Presidio analyzer on both samples
+    results_with = analyze_text(text_with_license)
+    results_without = analyze_text(text_without_license)
+
+    # Check that a medical license is detected in the first text
+    detected_entities = [r.entity_type for r in results_with]
+    self.assertIn("MEDICAL_LICENSE", detected_entities, "Should detect medical license")
+
+    # Check that no medical license is detected in the second text
+    detected_entities_without = [r.entity_type for r in results_without]
+    self.assertNotIn("MEDICAL_LICENSE", detected_entities_without, "Should not detect medical license")
+
 
 
 if __name__ == '__main__':
