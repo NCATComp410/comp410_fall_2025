@@ -72,7 +72,7 @@ registry.add_recognizer(UkNinoRecognizer(supported_language='en'))
 
 # Create an analyzer object
 # log_decision_process=True will log the decision process for debugging
-analyzer = AnalyzerEngine(registry=registry, log_decision_process=False)
+analyzer = AnalyzerEngine()
 anonymizer = AnonymizerEngine()
 
 
@@ -122,13 +122,17 @@ def analyze_text(text: str, entity_list: list, show_supported=False) -> list[str
     # Show all entities that can be detected for debugging
     if show_supported:
         return analyzer.get_supported_entities()
+    
     # Call analyzer to get results
-    results = analyzer.analyze(text=text,
-                               entities=entity_list,
-                               language='en',
-                               return_decision_process=True)  # return decision process details
+    results = analyzer.analyze(
+        text=text,
+        entities=entity_list,
+        language='en',
+        return_decision_process=True  # return decision process details
+    )
 
     return results
+
 
 
 def read_data() -> list:
