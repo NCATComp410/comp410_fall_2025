@@ -30,6 +30,30 @@ class TestTeam_type_error_titans(unittest.TestCase):
 
     def test_location(self):
         """Test LOCATION functionality"""
+        # sample locations
+        states = [
+            "Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", 
+            "Connecticut", "Delaware", "Florida", "Georgia", "Hawaii", "Idaho", 
+            "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", 
+            "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", 
+            "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", 
+            "New Hampshire", "New Jersey", "New Mexico", "New York", 
+            "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", 
+            "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", 
+            "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", 
+            "West Virginia", "Wisconsin", "Wyoming"
+        ]
+        
+        # positive test cases
+        for area in states:
+            location_text = f'I live in {area}'
+            result = analyze_text(location_text, ['LOCATION'])
+            # check entity_type for LOCATION
+            self.assertEqual(result[0].entity_type, 'LOCATION')
+
+        # negative test case
+        result = analyze_text('I live in hidden', ['LOCATION'])
+        self.assertListEqual(result, [])
 
     def test_person(self):
         """Test PERSON functionality"""
