@@ -11,7 +11,7 @@ class TestTeam_type_error_titans(unittest.TestCase):
 
     def test_phone_number(self):
         """Test PHONE_NUMBER functionality"""
-        prefix = ['121', '212', '313']
+        prefix = ['919', '212', '313']
         middle = ['123', '456', '789']
         suffix = ['2233', '4455', '6677']
 
@@ -24,7 +24,7 @@ class TestTeam_type_error_titans(unittest.TestCase):
                     print(number_text)
                     result = analyze_text(number_text, ['PHONE_NUMBER'])
                     # check entity_type for PHONE_NUMBER
-                    #self.assertEqual(result[0].entity_type, 'PHONE_NUMBER')
+                    self.assertEqual(result[0].entity_type, 'PHONE_NUMBER')
         result = analyze_text('my phone number is hidden', ['PHONE_NUMBER'])
         self.assertListEqual(result, [])
 
