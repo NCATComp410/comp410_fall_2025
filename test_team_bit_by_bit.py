@@ -34,8 +34,6 @@ class TestTeam_bit_by_bit(unittest.TestCase):
 
     def test_crypto(self):
         """Test CRYPTO functionality"""
-
- 5-detect-crypto
         # Positive test cases (valid crypto patterns)
         crypto_samples = [
             "My wallet is 0x32Be343B94f860124dC4fEe278FDCBD38C102D88",  # Ethereum
@@ -48,8 +46,6 @@ class TestTeam_bit_by_bit(unittest.TestCase):
             # Check that we correctly detect crypto
             self.assertGreater(len(result), 0, f"No crypto detected in: {sample}")
             self.assertEqual(result[0].entity_type, 'CRYPTO')
-
-   
 
         # Negative test cases (no crypto present)
         negative_samples = [
@@ -64,7 +60,7 @@ class TestTeam_bit_by_bit(unittest.TestCase):
             self.assertListEqual(result, [], f"False positive for: {sample}")
 
             
-      def test_date_time(self):
+    def test_date_time(self):
         """Test DATE_TIME functionality"""
         valid_dates = [
             'January 1, 2025', #All possible date_times
@@ -87,11 +83,7 @@ class TestTeam_bit_by_bit(unittest.TestCase):
         # Negative test cases
         result = analyze_text("The event happens at", ['DATE_TIME'])
         self.assertEqual(result, [])
-        main   
-            
-            
-            
-           
+
 
 if __name__ == '__main__':
     unittest.main()
