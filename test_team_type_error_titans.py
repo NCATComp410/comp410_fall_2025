@@ -36,7 +36,7 @@ class TestTeam_type_error_titans(unittest.TestCase):
                     print(nino_text)
                     result = analyze_text(nino_text, ['UK_NINO'])
                     # Check entity_type for UK_NINO
-                    #self.assertEqual(result[0].entity_type, 'UK_NINO')
+                    self.assertEqual(result[0].entity_type, 'UK_NINO')
         result = analyze_text('my nino is hidden', ['UK_NINO'])
         self.assertListEqual(result, [])
 
