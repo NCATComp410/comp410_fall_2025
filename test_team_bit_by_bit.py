@@ -69,6 +69,8 @@ class TestTeam_bit_by_bit(unittest.TestCase):
         text_negative = "The office extension is 1001, please call quickly."
         results_negative = analyze_text(text_negative, [ENTITY_TYPE])
         self.assertFalse(any(r.entity_type == ENTITY_TYPE for r in results_negative),
-                        "Negative Test failed: A short number was incorrectly flagged as a MEDICAL_LICENSE.")
+                         "Negative Test failed: A short number was incorrectly flagged as a MEDICAL_LICENSE.")
+
+
 if __name__ == '__main__':
     unittest.main()
