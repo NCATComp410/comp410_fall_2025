@@ -18,14 +18,16 @@ class TestTeam_type_error_titans(unittest.TestCase):
         prefix = ['943','485','901']
         middle = ['476','777','234']
         suffix = ['591','345','561']
-        check = ['9','0','7']
+        check = ['9','7','8']
 
-        for p in prefix:
-            for m in middle:
-                for s in suffix:
-                    for c in check:
-                        nhs_text = f'my uk_nhs is {p}{m}{s}{c}'
-                        result = analyze_text(nhs_text,['UK_NHS'])
+        for i, p in enumerate(prefix):
+            m = middle[i]
+            s = suffix[i]
+            c = check[i]
+
+            nhs_text = f'my uk_nhs is {p}{m}{s}{c}'
+            result = analyze_text(nhs_text,['UK_NHS'])
+            self.assertEqual(result[0].entity_type,'UK_NHS')
 
         result = analyze_text('my uk_nhs is hidden',['UK_NHS'])
         self.assertListEqual(result,[])
