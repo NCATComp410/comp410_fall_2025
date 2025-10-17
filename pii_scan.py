@@ -2,7 +2,8 @@
 import re
 import logging
 import spacy
-from presidio_analyzer import AnalyzerEngine, RecognizerRegistry, RecognizerResult
+from presidio_analyzer import (AnalyzerEngine, RecognizerRegistry, RecognizerResult, 
+                               PatternRecognizer, Pattern,)
 from presidio_analyzer.predefined_recognizers import (ItDriverLicenseRecognizer,
                                                       ItVatCodeRecognizer,
                                                       ItFiscalCodeRecognizer,
@@ -71,6 +72,21 @@ registry.add_recognizer(UkNinoRecognizer(supported_language='en'))
 
 
 # Create an analyzer object
+
+crypto_pattern = Pattern(
+    "Crypto wallet pattern",
+    r"\b(?:0x[a-fA-F0-9]{40}|[13LM][a-km-zA-HJ-NP-Z1-9]{25,34}|ltc1[a-z0-9]{39,59})\b",
+    0.6,
+)
+
+crypto_recognizer = PatternRecognizer(
+    supported_entity="CRYPTO",
+    patterns=[crypto_pattern],
+    name="crypto_recognizer"
+)
+
+registry.add_recognizer(crypto_recognizer)
+
 # log_decision_process=True will log the decision process for debugging
 analyzer = AnalyzerEngine(registry=registry, log_decision_process=False)
 anonymizer = AnonymizerEngine()
