@@ -11,6 +11,21 @@ class TestTeam_things_and_tings(unittest.TestCase):
 
     def test_url(self):
         """Test URL functionality"""
+        prefix = ['https://']
+        middle = ['www.github']
+        suffix = ['.com']
+
+        for p in prefix:
+            for m in middle:
+                for s in suffix:
+                    url_text = f'my url is {p}{m}{s}'
+                    print(url_text)
+                    result = analyze_text(url_text, ['URL'])
+                    self.assertEqual(result[0].entity_type, 'URL')
+
+        #negative test case
+        result = analyze_text('my url is hidden', ['URL'])
+        self.assertListEqual(result, [])
 
     def test_us_bank_number(self):
         """Test US_BANK_NUMBER functionality"""
@@ -40,6 +55,23 @@ class TestTeam_things_and_tings(unittest.TestCase):
         self.assertListEqual(result,[])
     def test_us_itin(self):
         """Test US_ITIN functionality"""
+        prefix = ['901', '912', '987']
+        middle = ['70', '85', '99']
+        suffix = ['1234', '5678']
+
+        # positive test cases
+        for p in prefix:
+            for m in middle:
+                for s in suffix:
+                    itin_text = f'my itin is {p}-{m}-{s}'
+                    result = analyze_text(itin_text, ['US_ITIN'])
+                    #check entity_type for US_ITIN
+                    self.assertTrue(result, f"Failed to detect ITIN in {itin_text}")
+                    self.assertEqual(result[0].entity_type, 'US_ITIN')
+        
+        # negative test cases
+        result = analyze_text('my itin is hidden', ['US_ITIN'])
+        self.assertListEqual(result, [])
 
     def test_us_passport(self):
         """Test US_PASSPORT functionality"""
