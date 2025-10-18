@@ -10,7 +10,23 @@ class TestTeam_code7(unittest.TestCase):
         self.assertEqual(show_aggie_pride(), "Aggie Pride - Worldwide")
 
     def test_es_nie(self):
-        """Test ES_NIE functionality"""
+        letters = 'TRWAGMYFPDXBNJZSQVHLCKE'
+        prefix = {'X': '0', 'Y': '1', 'Z': '2'}
+        middle = ['1234567', '7654321', '3456789']
+
+        for p in prefix:
+            for m in middle:
+                full = int(prefix[p] + m)
+                
+                suffix = letters[full % 23]
+                nie_text = f'my nie is {p}{m}{suffix}'
+                print(nie_text)
+                result = analyze_text(nie_text, ['ES_NIE'])
+                self.assertEqual(result[0].entity_type, 'ES_NIE')
+
+        # negative test cases
+        result = analyze_text('my nie is hidden', ['ES_NIE'])
+        self.assertListEqual(result, [])
 
     def test_es_nif(self):
         """Test ES_NIF functionality"""
