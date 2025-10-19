@@ -17,9 +17,9 @@ class TestTeam_type_error_titans(unittest.TestCase):
 
     def test_person(self):
         """Test PERSON functionality"""
-        self.assertTrue(True)
         result = analyze_text('Beyonce Knowles is Queen Bey',['PERSON'])
         self.assertEqual(result[0].entity_type,'PERSON')
+        self.assertEqual(result[1].entity_type,'PERSON')
 
         # --- Positive Test Case ---
         text_pos = 'Beyonce Knowles is Queen Bey'
@@ -49,11 +49,11 @@ class TestTeam_type_error_titans(unittest.TestCase):
         print("Detected Names (Positive):", detected_names_pos)
 
         # --- Negative Test Case (empty string) ---
-        text_neg = ''
+        text_neg =  "This isn't a name"
         # Simply check that empty input produces no detected names
-        self.assertEqual([], [], "No person should be detected in empty string")
-        print("Negative Masked Text:", text_neg)
-        print("Detected Names (Negative): []")
+        result_neg = analyze_text(text_neg, ['PERSON'])
+        self.assertListEqual(result_neg, [], "No person should be detected in empty string")
+
 
     def test_uk_nhs(self):
         """Test UK_NHS functionality"""
