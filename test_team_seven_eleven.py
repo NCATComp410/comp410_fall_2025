@@ -30,6 +30,29 @@ class TestTeam_seven_eleven(unittest.TestCase):
 
     def test_in_passport(self):
         """Test IN_PASSPORT functionality"""
+        prefix_char = ['K', 'P', 'J', 'A']
+        first_num = ['1', '4', '7', '9']
+        second_num = ['0', '3', '5', '6', '9']
+        next_four_nums = ['0233', '1457', '3412', '5231', '9895']
+        last_num = ['1', '9']
+        # pattern = r'^[A-Z][1-9]\d\s?\d{4}[1-9]$'
+
+        #build sample passport num
+        for p in prefix_char:
+            for f in first_num:
+                for s in second_num:
+                    for n in next_four_nums:
+                        for l in last_num:
+                            passport_test = f'{p}{f}{s}{n}{l}'
+                            result = analyze_text(passport_test, ['IN_PASSPORT'])
+                            # check entity_type for IN_PASSPORT
+                            self.assertEqual(result[0].entity_type, 'IN_PASSPORT')
+        
+        #negative test case
+        result = analyze_text('my passport number is hidden', ['IN_PASSPORT'])
+        self.assertListEqual(result, [])
+
+
 
     def test_in_vehicle_registration(self):
         """Test IN_VEHICLE_REGISTRATION functionality"""
