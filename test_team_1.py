@@ -11,7 +11,24 @@ class TestTeam_1(unittest.TestCase):
 
     def test_it_driver_license(self):
         """Test IT_DRIVER_LICENSE functionality"""
+        prefixes = ["AB", "CD", "EF", "U1"]
+        numbers = ["1234567", "7654321"]
+        suffixes = ["A", "B"]
 
+        # positive test cases
+        for prefix in prefixes:
+            for num in numbers:
+                for suffix in suffixes:
+                    candidate = f"{prefix}{num}{suffix}"
+                    with self.subTest(candidate=candidate):
+                        result = analyze_text(candidate, ["IT_DRIVER_LICENSE"])
+                        if result:
+                            self.assertEqual(result[0].entity_type, "IT_DRIVER_LICENSE")
+
+        # negative test case
+        result = analyze_text("my driver license number is hidden", ["IT_DRIVER_LICENSE"])
+        self.assertEqual(result, [])
+        
     def test_it_fiscal_code(self):
         """Test IT_FISCAL_CODE functionality"""
 
