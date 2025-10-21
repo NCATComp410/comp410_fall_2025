@@ -59,6 +59,15 @@ class TestTeam_seven_eleven(unittest.TestCase):
         # Negative Test Case
         result = analyze_text('My voter ID is hidden ', ['IN_VOTER'])
         self.assertListEqual(result, [])
+
+        result = analyze_text('My voter ID is wrong 678lolwut', ['IN_VOTER'])
+        self.assertListEqual(result, [])
+
+
+
+
+
+
                 
 
 
