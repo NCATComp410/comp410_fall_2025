@@ -1,6 +1,9 @@
 """Unit test file for team aggie_annihilators"""
 import unittest
 from pii_scan import analyze_text, show_aggie_pride  # noqa 
+from presidio_analyzer import AnalyzerEngine
+from pii_scan import analyze_text  # assuming your project uses this helper
+from au_medicare_recognizer import AuMedicareRecognizer  # your recognizer class
 
 
 class TestTeam_aggie_annihilators(unittest.TestCase):
@@ -20,27 +23,35 @@ class TestTeam_aggie_annihilators(unittest.TestCase):
 
     def test_au_medicare(self):
         """Test AU_MEDICARE functionality"""
-        prefix = ['1234', '2345']
-        middle = ['56789', '67890']
-        suffix = ['1', '2']
+        # Initialize analyzer and add recognizer
+        analyzer = AnalyzerEngine()
+        analyzer.registry.add_recognizer(AuMedicareRecognizer())
 
-        # build sample medicare numbers
-        # positive test cases
-        for p in prefix:
-            for m in middle:
-                for s in suffix:
-                    # The valid format is typically 10 digits: XXXX XXXXX X
-                    medicare_text = f"My Medicare number is {p} {m} {s}"
-                    result = analyze_text(medicare_text, ['AU_MEDICARE'])
+        # --- Positive (valid checksum) ---
+        valid_numbers = [
+            "My Medicare number is 2123 45670 1",
+            "Medicare: 3123 45670 2",
+            "Medicare card 5234 67890 3",
+            "Here’s my medicare number: 4123 45670 1",
+            "Medicare number 5123456703",  # no spaces
+        ]
+        for text in valid_numbers:
+            result = analyzer.analyze(text=text, entities=["AU_MEDICARE"], language="en")
+            self.assertGreater(len(result), 0, f"Expected AU_MEDICARE detected in: {text}")
+            self.assertEqual(result[0].entity_type, "AU_MEDICARE")
 
-                    # Check if an entity was detected before accessing it
-                    self.assertNotEqual(len(result), 1, f"No AU_MEDICARE entity found in: {medicare_text}")
+        # --- Negative (invalid checksum or format) ---
+        invalid_numbers = [
+            "Medicare number 2123 45670 9",  # wrong checksum
+            "My number is 7123 45670 1",     # invalid prefix (7 not allowed)
+            "Medicare 12345678",             # too short
+            "Medicare 2123-45670-1",         # dashes (not supported in default patterns)
+            "My medicare info is hidden",    # no number
+        ]
+        for text in invalid_numbers:
+            result = analyzer.analyze(text=text, entities=["AU_MEDICARE"], language="en")
+            self.assertEqual(result, [], f"Should NOT detect AU_MEDICARE in: {text}")
 
-
-
-        # negative test case
-        result = analyze_text('my medicare number is hidden', ['AU_MEDICARE'])
-        self.assertListEqual(result, [])
 
 
 
