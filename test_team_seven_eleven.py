@@ -14,6 +14,19 @@ class TestTeam_seven_eleven(unittest.TestCase):
 
     def test_in_pan(self):
         """Test IN_PAN functionality"""
+        beginning = ['ABCDE', 'FFFFF', 'ABABA', 'CDCDC']
+        middle = ['1234', '9999', '4343', '9876']
+        last = ['A', 'B', 'C', 'D']
+        # Positive Test Case
+        for b in beginning:
+            for m in middle:
+                for l in last:
+                    in_pan_text = f'My Indian Permanent Account Number is {b}-{m}-{l}'
+                    result = analyze_text(in_pan_text, ['IN_PAN'])
+                    self.assertEqual(result[0].entity_type, 'IN_PAN')
+        # Negative Test Case
+        result = analyze_text('My PAN is hidden', ['IN_PAN'])
+        self.assertEqual(result, [])
 
     def test_in_passport(self):
         """Test IN_PASSPORT functionality"""
