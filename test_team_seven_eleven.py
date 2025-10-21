@@ -28,6 +28,10 @@ class TestTeam_seven_eleven(unittest.TestCase):
         result = analyze_text('My PAN is hidden', ['IN_PAN'])
         self.assertEqual(result, [])
 
+        # Additional fail case: wrong format (letters inside the number section)
+        result = analyze_text('My Indian Permanent Account Number is ABCDE12F4A', ['IN_PAN'])
+        self.assertEqual(result, [])
+
     def test_in_passport(self):
         """Test IN_PASSPORT functionality"""
         prefix_char = ['K', 'P', 'J', 'A']
