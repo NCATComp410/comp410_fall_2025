@@ -1,7 +1,8 @@
 """Unit test file for team aggie_annihilators"""
 import unittest
+from presidio_analyzer import AnalyzerEngine
+from presidio_analyzer.predefined_recognizers.country_specific.australia.au_tfn_recognizer import AuTfnRecognizer
 from pii_scan import analyze_text, show_aggie_pride  # noqa
-from presidio_analyzer import Pattern, PatternRecognizer, AnalyzerEngine
 
 
 class TestTeam_aggie_annihilators(unittest.TestCase):
@@ -39,33 +40,29 @@ class TestTeam_aggie_annihilators(unittest.TestCase):
     def test_au_tfn(self):
         """Test AU_TFN functionality"""
 
-        # Create recognizer for AU_TFN (9 digits, optional dashes/spaces)
-        pattern = Pattern(name="AU_TFN", regex=r"\b\d{3}[-\s]?\d{3}[-\s]?\d{3}\b", score=0.5)
-        recognizer = PatternRecognizer(supported_entity="AU_TFN", patterns=[pattern])
-
-        # initialize analyzer and register recognizer
         analyzer = AnalyzerEngine()
-        analyzer.registry.add_recognizer(recognizer)
+        analyzer.registry.add_recognizer(AuTfnRecognizer())
 
-        # --- positive test cases ---
-        prefix = ['123', '321']
-        middle = ['456', '654']
-        suffix = ['782', '987']
+        # --- Positive (valid checksum) ---
+        positives = [
+            "My TFN is 123 456 782",
+            "TFN: 555 555 556",
+            "Tax file number 876543210",
+        ]
+        for text in positives:
+            result = analyzer.analyze(text=text, entities=["AU_TFN"], language="en")
+            self.assertGreater(len(result), 0, f"Expected AU_TFN in: {text}")
+            self.assertEqual(result[0].entity_type, "AU_TFN")
 
-        for p in prefix:
-            for m in middle:
-                for s in suffix:
-                    pos_text = f"My TFN is {p}-{m}-{s}"
-                    result = analyzer.analyze(text=pos_text, entities=["AU_TFN"], language="en")
-                    self.assertGreater(len(result), 0, f"Expected one AU_TFN entity in: {pos_text}")
-                    self.assertEqual(result[0].entity_type, "AU_TFN")
-
-        # --- negative test cases ---
-        neg_text = "My TFN is hidden"
-        result = analyzer.analyze(text=neg_text, entities=["AU_TFN"], language="en")
-        self.assertListEqual(result, [])        
-
-
+        # --- Negative (invalid) ---
+        negatives = [
+            "My TFN is 123 456 789",
+            "TFN: 111 111 111",
+            "tax file number is hidden",
+        ]
+        for text in negatives:
+            result = analyzer.analyze(text=text, entities=["AU_TFN"], language="en")
+            self.assertEqual(result, [], f"Should NOT detect AU_TFN in: {text}")        
 
 
 if __name__ == '__main__':
