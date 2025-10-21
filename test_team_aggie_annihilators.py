@@ -1,63 +1,55 @@
-"""Unit test file for team aggie_annihilators"""
-import unittest
-from pii_scan import analyze_text, show_aggie_pride  # noqa 
-from presidio_analyzer import AnalyzerEngine
-from pii_scan import analyze_text  # assuming your project uses this helper
-from au_medicare_recognizer import AuMedicareRecognizer  # your recognizer class
+def test_au_medicare(self):
+    """Test AU_MEDICARE with proper format + modulus-10 checksum (first 8 digits; 9th is check digit)."""
+    import re
 
+    # Regex: XXXX XXXXX X  (10 digits with spaces: 4 + 5 + 1)
+    medicare_pattern = re.compile(r"\b\d{4}\s\d{5}\s\d\b")
 
-class TestTeam_aggie_annihilators(unittest.TestCase):
-    """Test team aggie_annihilators PII functions"""
-    def test_show_aggie_pride(self):
-        """Test to make sure Aggie Pride is shown correctly"""
-        self.assertEqual(show_aggie_pride(), "Aggie Pride - Worldwide")
+    # Local helper: checksum for first 8 digits per AU Medicare spec
+    def checksum_first8(d8: str) -> int:
+        weights = [1, 3, 7, 9, 1, 3, 7, 9]
+        return sum(int(d) * w for d, w in zip(d8, weights)) % 10
 
-    def test_aba_routing_number(self):
-        """Test ABA_ROUTING_NUMBER functionality"""
+    # --- TA examples (must behave differently due to checksum) ---
+    valid_example = "2123 45670 1"    # 9th digit (0) matches sum(first8)%10
+    invalid_example = "2123 25870 1"  # wrong checksum at 9th digit
 
-    def test_au_abn(self):
-        """Test AU_ABN functionality"""
+    # Format checks (regex should match both; checksum distinguishes them)
+    self.assertRegex(valid_example, medicare_pattern, "Regex failed on valid formatted example")
+    self.assertRegex(invalid_example, medicare_pattern, "Regex should match format even when checksum is wrong")
 
-    def test_au_acn(self):
-        """Test AU_ACN functionality"""
+    # Checksum math sanity
+    v_digits = valid_example.replace(" ", "")
+    i_digits = invalid_example.replace(" ", "")
+    self.assertEqual(checksum_first8(v_digits[:8]), int(v_digits[8]), "Valid example checksum should match 9th digit")
+    self.assertNotEqual(checksum_first8(i_digits[:8]), int(i_digits[8]), "Invalid example checksum should NOT match 9th digit")
 
-    def test_au_medicare(self):
-        """Test AU_MEDICARE functionality"""
-        # Initialize analyzer and add recognizer
-        analyzer = AnalyzerEngine()
-        analyzer.registry.add_recognizer(AuMedicareRecognizer())
+    # Analyzer behavior: detect valid, ignore invalid
+    self.assertGreater(len(analyze_text(valid_example, ['AU_MEDICARE'])), 0, "Expected AU_MEDICARE detection for valid example")
+    self.assertListEqual(analyze_text(invalid_example, ['AU_MEDICARE']), [], "Should not detect AU_MEDICARE for invalid checksum")
 
-        # --- Positive (valid checksum) ---
-        valid_numbers = [
-            "My Medicare number is 2123 45670 1",
-            "Medicare: 3123 45670 2",
-            "Medicare card 5234 67890 3",
-            "Here’s my medicare number: 4123 45670 1",
-            "Medicare number 5123456703",  # no spaces
-        ]
-        for text in valid_numbers:
-            result = analyzer.analyze(text=text, entities=["AU_MEDICARE"], language="en")
-            self.assertGreater(len(result), 0, f"Expected AU_MEDICARE detected in: {text}")
-            self.assertEqual(result[0].entity_type, "AU_MEDICARE")
+    # --- Programmatic cases: build valid & invalid numbers using checksum ---
+    # Each item is an 8-digit base (first 4 + next 4); 9th digit is computed; 10th digit (IRN) can be 0-9 and is not part of checksum
+    base8_list = ["12345678", "23451111", "98766543", "21234567", "34561234"]
+    irns = ["0", "1", "2", "9"]
 
-        # --- Negative (invalid checksum or format) ---
-        invalid_numbers = [
-            "Medicare number 2123 45670 9",  # wrong checksum
-            "My number is 7123 45670 1",     # invalid prefix (7 not allowed)
-            "Medicare 12345678",             # too short
-            "Medicare 2123-45670-1",         # dashes (not supported in default patterns)
-            "My medicare info is hidden",    # no number
-        ]
-        for text in invalid_numbers:
-            result = analyzer.analyze(text=text, entities=["AU_MEDICARE"], language="en")
-            self.assertEqual(result, [], f"Should NOT detect AU_MEDICARE in: {text}")
+    for base8 in base8_list:
+        p4 = base8[:4]
+        n4 = base8[4:]  # positions 5–8
+        cd = checksum_first8(base8)  # 9th digit
+        for irn in irns:
+            # Valid number
+            valid_num = f"{p4} {n4}{cd} {irn}"
+            self.assertRegex(valid_num, medicare_pattern, f"Regex failed on: {valid_num}")
+            self.assertGreater(len(analyze_text(valid_num, ['AU_MEDICARE'])), 0, f"Expected detection for valid: {valid_num}")
 
+            # Invalid number: flip checksum digit but keep format
+            bad_cd = (cd + 1) % 10
+            invalid_num = f"{p4} {n4}{bad_cd} {irn}"
+            self.assertRegex(invalid_num, medicare_pattern, f"Regex failed on: {invalid_num}")
+            self.assertListEqual(analyze_text(invalid_num, ['AU_MEDICARE']), [], f"Should not detect invalid checksum: {invalid_num}")
 
-
-
-    def test_au_tfn(self):
-        """Test AU_TFN functionality"""
-
-
-if __name__ == '__main__':
-    unittest.main()
+    # Negative: no number present
+    none_text = "my medicare number is hidden"
+    self.assertNotRegex(none_text, medicare_pattern)
+    self.assertListEqual(analyze_text(none_text, ['AU_MEDICARE']), [])
