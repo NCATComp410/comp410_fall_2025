@@ -31,16 +31,38 @@ class TestTeam_1(unittest.TestCase):
         
     def test_it_fiscal_code(self):
         """Test IT_FISCAL_CODE functionality"""
-
+        #Positive test case
+        test_code = 'RSSMRA80M15H501K'
+        fiscal_code_regex = r"\b[A-Z]{6}[0-9LMNPQRSTUV]{2}[A-Z]{1}[0-9LMNPQRSTUV]{2}[A-Z]{1}[0-9LMNPQRSTUV]{3}[A-Z]{1}\b"
+        result = analyze_text(test_code,['IT_FISCAL_CODE'])
+        self.assertNotEqual(result, [], "Expected a fiscal code to be detected.")
+        self.assertEqual(result[0].entity_type, 'IT_FISCAL_CODE',
+                         "The detected entity type is incorrect.")
+        #Negative test case
+        w_result = analyze_text('Error: No Fiscal Code found',['IT_FISCAL_CODE'])
+        self.assertEqual(w_result, [], "Expected no fiscal codes to be detected in this text.")
     def test_it_identity_card(self):
         """Test IT_IDENTITY_CARD functionality"""
 
     def test_it_passport(self):
         """Test IT_PASSPORT functionality"""
+        prefix = ['HA', 'HB']
+        numbers = ['1234567', '7654321']
+
+        # positive test cases
+        for p in prefix:
+            for n in numbers:
+                passport_text = f'my passport is {p}{n}'
+                result = analyze_text(passport_text, ['IT_PASSPORT'])
+                # check entity_type for IT_PASSPORT
+                self.assertEqual(result[0].entity_type, 'IT_PASSPORT')
+
+        # negative test case
+        result = analyze_text('my passport is hidden', ['IT_PASSPORT'])
+        self.assertListEqual(result, [])
 
     def test_it_vat_code(self):
         """Test IT_VAT_CODE functionality"""
 
-
-if __name__ == '__main__':
-    unittest.main()
+    if __name__ == '__main__':
+        unittest.main()
