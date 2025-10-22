@@ -1,7 +1,5 @@
 """Unit test file for team aggie_annihilators"""
 import unittest
-from presidio_analyzer import AnalyzerEngine
-from presidio_analyzer.predefined_recognizers.country_specific.australia.au_tfn_recognizer import AuTfnRecognizer
 from pii_scan import analyze_text, show_aggie_pride  # noqa
 
 
@@ -40,9 +38,6 @@ class TestTeam_aggie_annihilators(unittest.TestCase):
     def test_au_tfn(self):
         """Test AU_TFN functionality"""
 
-        analyzer = AnalyzerEngine()
-        analyzer.registry.add_recognizer(AuTfnRecognizer())
-
         # --- Positive (valid checksum) ---
         positives = [
             "My TFN is 123 456 782",
@@ -50,7 +45,7 @@ class TestTeam_aggie_annihilators(unittest.TestCase):
             "Tax file number 876543210",
         ]
         for text in positives:
-            result = analyzer.analyze(text=text, entities=["AU_TFN"], language="en")
+            result = analyze_text(text, ["AU_TFN"])
             self.assertGreater(len(result), 0, f"Expected AU_TFN in: {text}")
             self.assertEqual(result[0].entity_type, "AU_TFN")
 
@@ -61,7 +56,7 @@ class TestTeam_aggie_annihilators(unittest.TestCase):
             "tax file number is hidden",
         ]
         for text in negatives:
-            result = analyzer.analyze(text=text, entities=["AU_TFN"], language="en")
+            result = analyze_text(text, ["AU_TFN"])
             self.assertEqual(result, [], f"Should NOT detect AU_TFN in: {text}")        
 
 
