@@ -82,6 +82,31 @@ class TestTeam_seven_eleven(unittest.TestCase):
 
     def test_in_voter(self):
         """Test IN_VOTER functionality"""
+        # Voter ID Sample Pattern
+        series = ['ABC', 'STU', 'WXY']
+        number = ['1234567', '9871236', '0189453' ]
+
+        # Positive Test Case
+        for ser in series:
+            for numb in number:
+                voterID_text = f'My voter id number is {ser}{numb}'
+                result = analyze_text(voterID_text , ['IN_VOTER'])
+                self.assertEqual(result[0].entity_type, 'IN_VOTER')
+        # Negative Test Case
+        result = analyze_text('My voter ID is hidden ', ['IN_VOTER'])
+        self.assertListEqual(result, [])
+
+        result = analyze_text('My voter ID is wrong 678lolwut', ['IN_VOTER'])
+        self.assertListEqual(result, [])
+
+
+
+
+
+
+                
+
+
 
 
 if __name__ == '__main__':
