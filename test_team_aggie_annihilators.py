@@ -1,6 +1,6 @@
 """Unit test file for team aggie_annihilators"""
 import unittest
-from pii_scan import analyze_text, show_aggie_pride  # noqa 
+from pii_scan import analyze_text, show_aggie_pride  # noqa
 
 
 class TestTeam_aggie_annihilators(unittest.TestCase):
@@ -37,6 +37,27 @@ class TestTeam_aggie_annihilators(unittest.TestCase):
 
     def test_au_tfn(self):
         """Test AU_TFN functionality"""
+
+        # --- Positive (valid checksum) ---
+        positives = [
+            "My TFN is 123 456 782",
+            "TFN: 555 555 556",
+            "Tax file number 876543210",
+        ]
+        for text in positives:
+            result = analyze_text(text, ["AU_TFN"])
+            self.assertGreater(len(result), 0, f"Expected AU_TFN in: {text}")
+            self.assertEqual(result[0].entity_type, "AU_TFN")
+
+        # --- Negative (invalid) ---
+        negatives = [
+            "My TFN is 123 456 789",
+            "TFN: 111 111 111",
+            "tax file number is hidden",
+        ]
+        for text in negatives:
+            result = analyze_text(text, ["AU_TFN"])
+            self.assertEqual(result, [], f"Should NOT detect AU_TFN in: {text}")        
 
 
 if __name__ == '__main__':
