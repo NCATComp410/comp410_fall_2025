@@ -14,6 +14,21 @@ class TestTeam_aggie_annihilators(unittest.TestCase):
 
     def test_au_abn(self):
         """Test AU_ABN functionality"""
+        # Positive test case - valid ABN format
+        abn_text = "The company's ABN is 51824753556"
+        result = analyze_text(abn_text, ['AU_ABN'])
+        self.assertEqual(len(result), 1, "Expected one AU_ABN detection")
+        self.assertEqual(result[0].entity_type, 'AU_ABN')
+
+        #Another pocitive case with ABN prefix
+        abn_text_prefix = "ABN 51824753556 belongs to Example Pty Ltd"
+        result = analyze_text(abn_text_prefix, ['AU_ABN'])
+        self.assertEqual(len(result),1, "Expected one AU_ABN detection with prefix")
+
+        # negative test case no ABN present
+        no_abn_text = "The company registration was successful"
+        result = analyze_text(no_abn_text, ['AU_ABN'])
+        self.assertEqual(result, [], "Expected no AU_ABN detection in non-ABN text")
 
     def test_au_acn(self):
         """Test AU_ACN functionality"""
