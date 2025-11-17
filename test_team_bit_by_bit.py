@@ -79,10 +79,40 @@ class TestTeam_bit_by_bit(unittest.TestCase):
             result = analyze_text(text, ['DATE_TIME'])
             self.assertTrue(result, f"No DATE_TIME entity found for: {date_text}")
             self.assertEqual(result[0].entity_type, 'DATE_TIME', f"Incorrect entity for: {date_text}")
-
+            
         # Negative test cases
         result = analyze_text("The event happens at", ['DATE_TIME'])
         self.assertEqual(result, [])
+
+    def test_medical_license(self): 
+        """
+        Test MEDICAL_LICENSE functionality. (The final working version)
+        """
+        ENTITY_TYPE = "MEDICAL_LICENSE"
+
+        # --- POSITIVE TEST CASES (25% of grade) ---
+
+        # 1. Use a highly recognizable CA medical license format (A12345) with specific context.
+        text_1 = "CA Medical License H93456781 is valid."
+        results_1 = analyze_text(text_1, [ENTITY_TYPE])
+        self.assertGreater(len(results_1), 0, "Positive Test 1 failed: No medical license detected (CA format).")
+        self.assertTrue(any(r.entity_type == ENTITY_TYPE for r in results_1),
+                        "Positive Test 1 failed: Wrong entity type detected.")
+
+        # 2. Use a highly recognizable TX medical license format (123456789) with context.
+        text_2 = "The doctor's TX state license is BB7989001."
+        results_2 = analyze_text(text_2, [ENTITY_TYPE])
+        self.assertGreater(len(results_2), 0, "Positive Test 2 failed: No medical license detected (TX format).")
+        self.assertTrue(any(r.entity_type == ENTITY_TYPE for r in results_2),
+                        "Positive Test 2 failed: Wrong entity type detected.")
+
+        # --- NEGATIVE TEST CASE (25% of grade) ---
+
+        # 3. Test a short, non-license number that could be a false positive.
+        text_negative = "The office extension is 1001, please call quickly."
+        results_negative = analyze_text(text_negative, [ENTITY_TYPE])
+        self.assertFalse(any(r.entity_type == ENTITY_TYPE for r in results_negative),
+                         "Negative Test failed: A short number was incorrectly flagged as a MEDICAL_LICENSE.")
 
 
 if __name__ == '__main__':
