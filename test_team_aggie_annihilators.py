@@ -11,6 +11,20 @@ class TestTeam_aggie_annihilators(unittest.TestCase):
 
     def test_aba_routing_number(self):
         """Test ABA_ROUTING_NUMBER functionality"""
+        # Positive test case - basic format
+        aba = 'my australian routing number'
+        result = analyze_text(acn, ['aba_routing_number'])
+        self.assertEqual(len(result), 1)
+        self.assertEqual(result[0].entity_type, 'aba_routing_number')
+        
+        # Try without 'ACN' prefix
+        aba_no_prefix = 'My routing number is 123456789'
+        result = analyze_text(aba_no_prefix, ['aba_routing_number'])
+        self.assertEqual(len(result), 1)
+
+        # negative test case
+        result = analyze_text('Routing is required', ['aba_routing_number'])
+        self.assertEqual(result, [])
 
     def test_au_abn(self):
         """Test AU_ABN functionality"""
